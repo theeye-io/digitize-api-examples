@@ -16,17 +16,17 @@ curl -X GET \
 
 ## correr script de download
 
-aca también se usa el token de la organizacion origen, de donde descargar los
- pdf y json de annotation
+aca también se usa el token de la organizacion origen, de donde descargar los pdf y annotation
 
 ```
 token=''
 
 node index.js ./lote.json ${token}
 ```
-esto descarga pdf y json
 
-## la organizacion puede estar en modo procesamiento "immediate: false" para que los comprobantes queden en espera al ser importados de forma masiva
+esto descarga pdf y json.
+
+la organizacion puede estar en modo procesamiento "immediate: false" para que los comprobantes queden en espera al ser importados de forma masiva
 
 ## subir todos los comprobantes. aca se usa el token de la organizacion destino.
 
