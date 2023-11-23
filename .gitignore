@@ -37,3 +37,6 @@ conciliacion/processed/
 templates.json
 *.zip
 data
+config.json
+current_index.json
+data.json

@@ -1,27 +1,32 @@
 const fs = require('fs')
 const axios = require('axios')
 
-const currentIndex = require('./current_index.json').index
+const indexFile = './current_index.json'
+if (!fs.existsSync('./current_index.json')) {
+  fs.writeFileSync( indexFile, JSON.stringify({ index: 0 }) )
+}
+
+const currentIndex = require(indexFile).index
+
 const toProcessAmount = 100
 
 const outputName = './annotations-#/'
 const output = outputName.replace('#', (currentIndex / toProcessAmount))
 
 const main = async (file, token) => {
-
-
 	fs.mkdirSync(output)
 
   const docs = JSON.parse(fs.readFileSync(file))
-
   const serie = currentIndex + toProcessAmount
   let index
 
   for (index = currentIndex; index < serie && index < docs.length; index++) {
     const doc = docs[index]
-    console.log(`downloading #${index}:${doc.id}`)
-    await annotationDownload(doc.id, token)
-    await pdfDownload(doc.id, token)
+    const id = doc.document_id
+
+    console.log(`downloading #${index}:${id}`)
+    await pdfDownload(id, token)
+    //await annotationDownload(id, token)
   }
 
   fs.writeFileSync('./current_index.json', JSON.stringify({index}))
@@ -30,7 +35,7 @@ const main = async (file, token) => {
 const pdfDownload = (id, token) => {
   return axios({
     method: 'get',
-    url: 'https://tagger-api.theeye.io/api/Documents/' + id + '/original?access_token=' + token,
+    url: 'https://tagger-api-dev.theeye.io/api/Documents/' + id + '/original?access_token=' + token,
     responseType: 'stream'
   }).then(response => {
     const writer = fs.createWriteStream(output + id + '.pdf')
@@ -71,5 +76,5 @@ const annotationDownload = (id, token) => {
   })
 }
 
-main(process.argv[2], process.argv[3])
+main(process.argv[2], process.argv[3]).catch(e => console.error(e.message))
 

@@ -21,7 +21,7 @@ aca también se usa el token de la organizacion origen, de donde descargar los p
 ```
 token=''
 
-node index.js ./lote.json ${token}
+node downloader.js ./lote.json ${token}
 ```
 
 esto descarga pdf y json.
